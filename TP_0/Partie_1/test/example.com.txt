@@ -1,1 +1,2 @@
 ugo%service@example.com
+ugo%service@example.com

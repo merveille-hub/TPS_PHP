@@ -3,14 +3,16 @@ InterpreterFormulairePart3($_GET);
 //InterpreterFormulairePart2($_GET);
 
 $myEmailFileName = "Emails.txt";
+$adressesNonValidesFileName = "adressesNonValides.txt";
+$adressesValidesTriesFileName = "EmailsT.txt";
+
 $myEmailFile = fopen($myEmailFileName, "r") or die("Unable to open file!");
 $emailsTries = [];
 //$pattern = '/(?:[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i';
 //$pattern = "/(.+)@(.+)\.([a-z]{3,4})/i";
 $pattern = '/^(([^<>\-\+()\[\]\\.,;:\s@"]+(\.[^<>\-\+()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/i';
 //$pattern = "/^(.{3,})@([^.]+)\.([a-z]{2,10})$/i";
-$adressesNonValidesFileName = "adressesNonValides.txt";
-$adressesValidesTriesFileName = "EmailsT.txt";
+
 //$adressesNonValidesFile = fopen($adressesNonValidesFileName, "w+");
 //$adressesValidesFile = fopen($adressesValidesTriesFileName, "w+");
 while (!feof($myEmailFile)) {
@@ -19,10 +21,12 @@ while (!feof($myEmailFile)) {
   if (preg_match($pattern, $email)) {
     //echo 'valide : ' . $email . '<br>';
     AjouterEtSupprimerDoublons($adressesValidesTriesFileName, $email);
+    AjouterEtSupprimerDoublons($myEmailFileName, $email);
     AjouterEtSupprimerDoublons('NonTrierEmailsT.txt', $email);
   } else {
     //echo 'non valide : ' . $email . '<br>';
     AjouterEtSupprimerDoublons($adressesNonValidesFileName, $email);
+    AjouterEtSupprimerDoublons($myEmailFileName, $email);
     //fwrite($adressesNonValidesFile, $email);
     //filter_var($j, FILTER_VALIDATE_EMAIL)
   }
@@ -35,12 +39,68 @@ CreateFileForEachDomainAndAddAdresses([
   $adressesNonValidesFileName,
   $adressesValidesTriesFileName
 ]);
-function EnvoyerMailsFichier(string $filename, string $from = "tsafackmerveille15@gmail.com")
+
+function InterpreterFormulairePart3(array $data)
 {
+  var_dump($data);
+  if(isset($data['ajout-email']) && !empty($data['ajout-email'])){
+    $email = $data["ajout-email"];
+    echo $email;
+      if (filter_var($email, FILTER_VALIDATE_EMAIL) !== false) {
+        $domain = substr(strrchr($email, "@"), 1);
+        if (dns_check_record($domain, "MX") || checkdnsrr($domain, "A")) {
+          AjouterEtSupprimerDoublonsLigneParLigne('EmailsT.txt', $email);
+          AjouterEtSupprimerDoublonsLigneParLigne('Emails.txt', $email);         
+          echo "L'adresse email existe certainement.";
+        } else
+          echo "L'adresse email n'existe probablement pas.";
+      } else {
+        echo "L'adresse mail ne correspond pas aux spécifications PHP";
+      }
+  }
+  elseif (isset($data['emails-envoye']) && isset($data['text-email']) &&
+        !empty($data['emails-envoye']) && !empty($data['text-email'])) {
+    $email = $data['emails-envoye'];
+    $message = $data['text-email'];
+    $nb_envoi = EnvoyerMailsFichier('EmailsT.txt', $email, $message);
+    echo 'nombre d\'envoi : ' . $nb_envoi;
+  }
+  if (isset($data["action"])) {
+    var_dump($data);
+    $action = $data['action'];
+    if ($action === "envoyer-emails") {
+      $email = $data['emails-envoye'];
+      $message = $data['text-email'];
+      $nb_envoi = EnvoyerMailsFichier('EmailsT.txt', $email, $message);
+      echo 'nombre d\'envoi : ' . $nb_envoi;
+    } else if ($action === "ajouter-email") {
+      var_dump($data);
+      $email = $data["email"];
+      echo $email;
+      if (filter_var($email, FILTER_VALIDATE_EMAIL) !== false) {
+        $domain = substr(strrchr($email, "@"), 1);
+        if (dns_check_record($domain, "MX") || checkdnsrr($domain, "A")) {
+          AjouterEtSupprimerDoublonsLigneParLigne('EmailsT.txt', $email);
+          echo "L'adresse email existe certainement.";
+        } else
+          echo "L'adresse email n'existe probablement pas.";
+      } else {
+        echo "L'adresse mail ne correspond pas aux spécifications PHP";
+      }
+    }
+  }
+}
+
+function EnvoyerMailsFichier(
+  string $filename,
+  string $from = "tsafackmerveille15@gmail.com",
+  string $message = "Bonjour,\n\nCeci est un message envoyé via PHP.\n\nCordialement,\nVotre site"
+) {
   $file = fopen($filename, 'r');
   $headers = FaireHeaders($from);
   $subject = "Sujet du email";
-  $message = "Bonjour,\n\nCeci est un message envoyé via PHP.\n\nCordialement,\nVotre site";
+  $count = 0;
+  //$message = "Bonjour,\n\nCeci est un message envoyé via PHP.\n\nCordialement,\nVotre site";
   $nb_succes_envoi = 0;
   while (!feof($file)) {
     $to = fgets($file);
@@ -51,6 +111,13 @@ function EnvoyerMailsFichier(string $filename, string $from = "tsafackmerveille1
       echo "Envoi echoué pour l'email : $to";
       file_put_contents(__DIR__ . 'error_log.txt', "Envoi echoué pour l'email : $to");
     }
+
+    // Quand on atteint 100 emails → pause 60 secondes
+        if ($count % 100 == 0) {
+          echo "<br>⏸ Pause pour reposer le serveur...<br>";
+          flush(); // vide le buffer
+          sleep(60); // pause de 1 minute
+        }
   }
   return $nb_succes_envoi;
 }
@@ -77,31 +144,6 @@ function EnvoyerMail(string $to, string $subject, string $message, array|string 
   } else {
     echo "Échec de l'envoi de l'e-mail.";
     return false;
-  }
-}
-function InterpreterFormulairePart3(array $data)
-{
-  if (isset($data["action"])) {
-    $action = $data['action'];
-    if ($action === "envoyer-emails") {
-      $nb_envoi = EnvoyerMailsFichier('EmailsT.txt');
-      echo 'nombre d\'envoi : ' . $nb_envoi;
-    } else if ($action === "ajouter-email") {
-      $email = $data["email"];
-      echo $email;
-      if(filter_var($email, FILTER_VALIDATE_EMAIL) !== false){
-        $domain = substr(strrchr($email, "@"), 1);
-        if(dns_check_record($domain, "MX") || checkdnsrr($domain, "A")){
-          AjouterEtSupprimerDoublonsLigneParLigne('EmailsT.txt', $email);
-          echo "L'adresse email existe certainement.";
-        }
-        else
-          echo "L'adresse email n'existe probablement pas.";
-      }
-      else{
-        echo "L'adresse mail ne correspond pas aux spécifications PHP";
-      }
-    }
   }
 }
 function InterpreterFormulairePart2(array $data)
@@ -228,9 +270,11 @@ function TrierFichier($filename)
   sort($lignes);
   file_put_contents($filename, $lignes);
 }
-function AjouterEtSupprimerDoublons($filename, string $emailAdress)
+function AjouterEtSupprimerDoublons(string $filename, string $emailAdress)
 {
-  $lignes = file_get_contents($filename);
+  /* echo 'filename: ';
+  var_dump($filename); */
+  $lignes = file_get_contents((string)$filename);
   if (!str_contains($lignes, $emailAdress)) {
     file_put_contents($filename, $emailAdress, FILE_APPEND);
   }
@@ -239,6 +283,8 @@ function AjouterEtSupprimerDoublonsLigneParLigne($filename, string $emailAdress)
 {
   $file = fopen($filename, 'a+');
   $trouve = false;
+  //echo 'email 264';
+  //var_dump($emailAdress);
   while (!feof($file)) {
     $ligne = fgets($file);
     if (trim($ligne) === trim($emailAdress)) {
@@ -341,49 +387,95 @@ function AfficherTableauPretty(array $tableau)
   <h2>BIENVENUE SUR VOTRE APPLICATION</h2>
   <form action="" method="get" id="form-email">
     <div style="display: flex; gap: 20px;">
-      <button type="submit" name="action" value="envoyer-emails">Envoyer message à EmailsT.txt</button>
-      <button type="button" id="ajouter-email">Ajouter une adresse email</button>
+      <div>
+        <label for="emails-envoye">Entrer l'email de l'emetteur</label><br>
+        <input type="text" name="emails-envoye" id="emails-envoye"><br><br>
+        <label for="">Entrez votre texte</label><br>
+        <textarea name="text-email" id="text-email" placeholder="Entrer votre message"></textarea><br>
+        <button type="button" name="action" value="envoyer-emails" id="envoyer-emails">Envoyer message à EmailsT.txt</button>
+      </div>
+      <div>
+        <button type="button" id="ajouter-email">Ajouter une adresse email</button>
+        <div id="ajout-mail" style="opacity: 0; display: none;">
+          <label for="ajout-email">Entrer l'adresse email à mettre dans 'EmailsT.txt': </label><br>
+          <input type="text" id="ajout-email" name="ajout-email">
+          <br><br>
+          <button type="button" name="action" value="ajouter-email" id="envoyer-mail">ENREGISTRER DANS LE FICHIER</button>
+        </div>
+      </div>
     </div>
-    <div id="ajout-mail" style="opacity: 0; display: none;">
-      <label for="email">Entrer l'adresse email à mettre dans 'EmailsT.txt': </label>
-      <input type="text" id="email" name="email">
-      <br>
-      <button type="submit" name="action" value="ajouter-email" id="envoyer-mail">ENREGISTRER DANS LE FICHIER</button>
+
+    <div id="envoie-mail" style="opacity: 0; display: none;">
+
     </div>
-    <!-- <div style="display: flex; gap: 20px;">
-      <button type="submit" name="action" value="non-valide">1. Supprimer les adresses non valides</button>
-      <button type="submit" name="action" value="supprimer-doublons">2. Supprimer doublons</button>
-      <button type="submit" name="action" value="trier-emails">3. Trier les emails</button>
-      <button type="submit" name="action" value="separer-emails">4. Separer emails</button>
-    </div> -->
   </form>
 </body>
-<script  type="text/javascript">
-  const ajouter_email = document.getElementById('ajouter-email');
-  const ajout_mail = document.getElementById('ajout-mail');
-  const form = document.getElementById('form-email');
-  const emailInput = document.getElementById('email');
+<script type="text/javascript">
+const btn_ajouter_email = document.getElementById('ajouter-email');
+const ajout_mail = document.getElementById('ajout-mail');
+const form = document.getElementById('form-email');
+const btn_email_pour_envoyer = document.getElementById('envoyer-emails');
+const text_email = document.getElementById('text-email');
+const emailInputEnvoye = document.getElementById('emails-envoye');
+const btn_envoyer_mail = document.getElementById('envoyer-mail');
+const emailInputAjout = document.getElementById('ajout-email');
 
-  var visibleInputEmail = function() {
-    ajout_mail.style.opacity = '1';
-    ajout_mail.style.display = "block";
+function VerifierEmails(email) {
+  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regex.test(email);
+}
+
+function envoyerEmailFichier() {
+  const email = emailInputEnvoye.value.trim();
+  const textarea = text_email.value.trim();
+  if (!VerifierEmails(email) || textarea === "") {
+    alert("❌ Veuillez entrer un email valide et un message.");
+    return false;
   }
-  // Vérification avant envoi du formulaire
-  form.addEventListener("submit", function(event) {
-    const email = emailInput.value.trim();
-    const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  alert("✅ Email + message valides (simulation envoi)");
+  return true;
+}
 
-    if (!regex.test(email)) {
-      event.preventDefault(); // empêche l’envoi
-      alert("❌ Adresse email invalide !");
-    } else {
-      alert("✅ Email valide, envoi du formulaire...");
-    }
-  });
-  
-  ajouter_email.addEventListener('click', visibleInputEmail);
-  //envoyer_mail.addEventListener("click", verifierEmail());
+// afficher le champ ajout d'email
+btn_ajouter_email.addEventListener('click', function(event){
+  event.preventDefault();
+  ajout_mail.style.display = "block";
+  setTimeout(() => {
+    ajout_mail.style.opacity = "1";
+  }, 50);
+});
+
+// valider ajout d’email
+btn_envoyer_mail.addEventListener('click', function(event){
+  event.preventDefault();
+  const email = emailInputAjout.value.trim();
+  if(email === "" || !VerifierEmails(email)){
+    alert("❌ Email invalide !");
+    emailInputAjout.focus();
+  } else {
+    alert("✅ Email ajouté dans EmailsT.txt (simulation)");
+    form.requestSubmit(); // ✅ envoie normal avec validations et events
+  }
+});
+
+// valider l’envoi du message principal
+btn_email_pour_envoyer.addEventListener('click', function(event) {
+  event.preventDefault();
+  if (envoyerEmailFichier()) form.requestSubmit(); // ✅ idem ici
+});
+
+// validation finale côté JS avant envoi
+/* form.addEventListener("submit", function(event) {
+  const email = emailInputEnvoye.value.trim();
+  if (!VerifierEmails(email)) {
+    event.preventDefault();
+    alert("❌ Adresse email invalide !");
+  } else {
+    alert("✅ Email valide, envoi du formulaire...");
+  }
+}); */
 </script>
+
 <!-- <script>
 document.getElementById("ajouter-email").addEventListener("click", function () {
     const divAjout = document.getElementById("ajout-mail");
@@ -432,4 +524,5 @@ document.getElementById("emailForm").addEventListener("submit", function (e) {
     }
 });
 </script> -->
+
 </html>

@@ -1,2 +1,4 @@
 zoe..lem@domain.com
 ivan.!test@domain.com
+zoe..lem@domain.com
+ivan.!test@domain.com

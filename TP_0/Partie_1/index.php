@@ -23,10 +23,9 @@ while (!feof($myEmailFile)) {
     }
 }
 TrierFichier($adressesValidesTriesFileName);
-/* $domaines[] = ChercherDomaineEmail($adressesNonValidesFileName);
-$domaines[] = ChercherDomaineEmail($adressesValidesTriesFileName);
- */
-CreateFileForEachDomainAndAddAdresses([
+
+
+$resultDemains = CreateFileForEachDomainAndAddAdresses([
     $adressesNonValidesFileName,
     $adressesValidesTriesFileName
 ]);
@@ -81,6 +80,9 @@ function CreateFileForEachDomainAndAddAdresses(array $filenames)
     $domaines = array_merge_recursive(...$domaines);
     //$domaines = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($domaines)), false);
 
+    if(empty($domaines) || !is_array($domaines))
+        return false;
+
     //AfficherTableauPretty($domaines);
     foreach ($domaines as $key => $domaine) {
         echo $key;
@@ -89,8 +91,8 @@ function CreateFileForEachDomainAndAddAdresses(array $filenames)
         foreach ($domaine as $email) {
             file_put_contents($path, $email . PHP_EOL, FILE_APPEND);
         }
-        
     }
+    return true;
 }
 function AfficherTableauPretty(array $tableau)
 {
@@ -98,3 +100,15 @@ function AfficherTableauPretty(array $tableau)
     print_r($tableau);
     echo '</pre>';
 }
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
