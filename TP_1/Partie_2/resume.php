@@ -9,6 +9,7 @@ $competences_perso = $data['competence-perso'];
 $langues = $data['langues'];
 $centre_interets = $data['centre-interets'];
 $motivation = $data['motivation-perso'];
+//$descriptions = $data['description'];
 ?>
 
 <!DOCTYPE html>
@@ -101,7 +102,13 @@ $motivation = $data['motivation-perso'];
         <p><strong>Diplome : </strong><?= $formation['diplome'] ?></p>
         <p><strong>Localisation : </strong><?= $formation['localisation'] ?></p>
         <p><strong>Periode : </strong><?= $formation['date-debut'] ?> / <?= $formation['date-fin'] ?></p>
-        <p><strong>Description : </strong><?php var_dump($formation['description']); ?></p>
+        <p><strong>Description : </strong>
+        <ul>
+          <?php foreach ($formation['description'] as $key => $description) : ?>
+            <li><?= $description ?></li>
+          <?php endforeach; ?>
+        </ul>
+        </p>
         <hr>
       <?php endforeach; ?>
     </div>
@@ -117,7 +124,13 @@ $motivation = $data['motivation-perso'];
           <p><strong>Employeur : </strong><?= $experience['employeur'] ?></p>
           <p><strong>Localisation : </strong><?= $experience['localisation'] ?></p>
           <p><strong>Periode : </strong><?= $experience['date_debut'] ?> / <?= $experience['date_fin'] ?></p>
-          <p><strong>Description : </strong><?= $experience['description'] ?></p>
+          <p><strong>Description : </strong>
+            <ul>
+              <?php foreach ($experience['description'] as $key => $description) : ?>
+                <li><?= $description ?></li>
+              <?php endforeach; ?>
+            </ul>
+          </p>
           <hr>
         <?php endforeach;
         ?>
@@ -126,7 +139,11 @@ $motivation = $data['motivation-perso'];
       <div class="section">
         <h2>Compétences</h2>
         <ul>
-          <?php foreach ($competences_perso['competences'] as $key => $competence) : ?>
+          <?php 
+            echo '<pre>';
+            print_r($competences_perso);
+            echo '</pre>';
+            foreach ($competences_perso['competences'] as $key => $competence) : ?>
             <li><?= $competence ?></li>
           <?php endforeach; ?>
         </ul>
@@ -151,14 +168,18 @@ $motivation = $data['motivation-perso'];
       </div>
     </div>
 
-    
+
   </div>
   <br>
-    <div style="text-align: center;">
-      <button type="button" id="btn-valider" name="actionne" value="btn-valider">VALIDER</button>
-      <button type="button" id="btn-recommencer" name="actionne" value="btn-recommencer">RECOMMENCER</button>
-    </div>
+  <div style="text-align: center;">
+    <button type="button" id="btn-retour" name="actionne" value="btn-retour">SUIVANT</button>
+    <button type="button" id="btn-valider" name="actionne" value="btn-valider">VALIDER</button>
+    <button type="button" id="btn-recommencer" name="actionne" value="btn-recommencer">RECOMMENCER</button>
+  </div>
   <script>
+    document.getElementById('btn-retour').addEventListener('click', function() {
+
+    });
     document.getElementById('btn-valider').addEventListener('click', function() {
       window.location.href = 'cv1.php';
     });

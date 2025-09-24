@@ -111,8 +111,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
           </div>
         </details>
         <br>
-        <div class="flex-2" style="position: relative; left: 45%;">
-          <button type="button" id="btn-infos-perso" name="actionne" value="btn-infos-perso">ENVOYER : SUIVANT</button>
+        <div class="flex-3" style="position: relative; left: 45%;">
+          <button type="button" id="btn-infos-perso-precedent" name="actionne" value="btn-infos-perso-precedent">PRECEDENT</button>
+          <button type="button" id="btn-infos-perso" name="actionne" value="btn-infos-perso">SUIVANT</button>
           <button type="reset">REINITIALISER</button>
         </div>
       </form>
@@ -149,14 +150,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
                 </div>
               </div>
             </div>
-            <div>
-              <label for="description">Description poste</label><br>
-              <input type="text" name="description[]" id="description" class="flex-1" rows="10" cols="40"
-                placeholder="Satisfaction client accrue grâce à des solutions adaptées.
-                            Gestion de budgets de projet avec un retour sur investissement élevé.
-                            Formation et mentorat d'équipes pour maximiser le potentiel." value="• Satisfaction client accrue grâce à des solutions adaptées.
-                        • Gestion de budgets de projet avec un retour sur investissement élevé.
-                        • Formation et mentorat d'équipes pour maximiser le potentiel." />
+            <div id="description-experience-professionnelle">
+              <label for="description">Description de tâches accomplis</label><br>
+              <input type="text" name="description[]" class="flex-1"
+                placeholder="Entrer une description de vos missions ..."
+                value="Satisfaction client accrue grâce à des solutions adaptées." />
+              <button type="button" id="btn-description-experience-professionnelle">Ajouter une nouvelle description</button>
             </div>
             <hr>
           </div>
@@ -164,8 +163,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
 
         <button type="button" id="btn-ajouter-experience">Ajouter une autre expérience</button>
 
-        <div class="flex-2" style="position: relative; left: 45%;">
-          <button type="button" id="btn-experience-perso" name="actionne" value="btn-experience-perso">ENVOYER : SUIVANT</button>
+        <div class="flex-3" style="position: relative; left: 45%;">
+          <button type="button" id="btn-experience-perso-precedent" name="actionne" value="btn-experience-perso-precedent">PRECEDENT</button>
+          <button type="button" id="btn-experience-perso" name="actionne" value="btn-experience-perso">SUIVANT</button>
           <button type="reset">REINITIALISER</button>
         </div>
       </form>
@@ -203,10 +203,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
                     <input type="date" name="date-fin[]" id="date-fin" value="2025-09-22" required>
                   </div>
                 </div>
-                <div>
-                  <label for="description">Description poste</label>
-                  <input type="text" name="description[]" id="description" class="flex-1" rows="10" cols="40"
-                    placeholder="Formation axée sur l’administration des réseaux, la cybersécurité et les systèmes embarqués." />
+                <div id="description-formation-academique">
+                  <label for="description">Description formation reçue</label>
+                  <input type="text" name="description[]" class="flex-1"
+                    placeholder="Formation axée sur l’administration des réseaux, la cybersécurité et les systèmes embarqués."
+                    value="Formation axée sur l'administration des réseaux, la cybersécurité et les sytèmes embarqués." />
+                  <button type="button" id="btn-description-formation-academique">Ajouter une nouvelle description</button>
                 </div>
               </div>
             </div>
@@ -215,8 +217,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
 
         <button type="button" id="btn-ajouter-formation">Ajouter une autre formation</button>
 
-        <div class="flex-2" style="position: relative; left: 45%;">
-          <button type="button" id="btn-formation-perso" name="actionne" value="btn-formation-perso">ENVOYER : SUIVANT</button>
+        <div class="flex-3" style="position: relative; left: 45%;">
+          <button type="button" id="btn-formation-perso-precedent" name="actionne" value="btn-formation-perso-precedent">PRECEDENT</button>
+          <button type="button" id="btn-formation-perso" name="actionne" value="btn-formation-perso">SUIVANT</button>
           <button type="reset">REINITIALISER</button>
         </div>
       </form>
@@ -233,13 +236,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
               <div class="grid-2" id="intitule-competence">
                 <div class="competence">
                   <label>Compétence</label><br>
-                  <input type="text" name="competences[]" placeholder="Office365" value="Merveille">
+                  <input type="text" name="competences[]" placeholder="Office365" value="GitHub">
+                  <select name="niveau_competences[]">
+                    <option value="">Niveau</option>
+                    <option value="Débutant">Débutant</option>
+                    <option value="Intermédiaire">Intermédiaire</option>
+                    <option value="Avancé">Avancé</option>
+                    <option value="Expert">Expert</option>
+                  </select>
                 </div>
               </div>
               <button type="button" id="btn-ajouter-competence">Ajouter une autre compétence</button>
 
-              <div class="flex-2" style="position: relative; left: 45%;">
-                <button type="button" id="btn-competence-perso" name="actionne" value="btn-competence-perso">ENVOYER : SUIVANT</button>
+              <div class="flex-3" style="position: relative; left: 45%;">
+                <button type="button" id="btn-competence-perso-precedent" name="actionne" value="btn-competence-perso-precedent">SUIVANT</button>
+                <button type="button" id="btn-competence-perso" name="actionne" value="btn-competence-perso">SUIVANT</button>
                 <button type="reset">REINITIALISER</button>
               </div>
             </div>
@@ -265,8 +276,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
               </div>
               <button type="button" id="btn-ajouter-langue">Ajouter une autre langue</button>
 
-              <div class="flex-2" style="position: relative; left: 45%;">
-                <button type="button" id="btn-langue-perso" name="actionne" value="btn-langue-perso">ENVOYER : SUIVANT</button>
+              <div class="flex-3" style="position: relative; left: 45%;">
+                <button type="button" id="btn-langue-perso-precedent" name="actionne" value="btn-langue-perso-precedent">PRECEDENT</button>
+                <button type="button" id="btn-langue-perso" name="actionne" value="btn-langue-perso">SUIVANT</button>
                 <button type="reset">REINITIALISER</button>
               </div>
             </div>
@@ -291,8 +303,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
               </div>
               <button type="button" id="btn-ajouter-centre-interet">Ajouter un autre centre d'intérêt</button>
 
-              <div class="flex-2" style="position: relative; left: 45%;">
-                <button type="button" id="btn-centre-interet-perso" name="actionne" value="btn-centre-interet-perso">ENVOYER : SUIVANT</button>
+              <div class="flex-3" style="position: relative; left: 45%;">
+                <button type="button" id="btn-centre-interet-perso-precedent" name="actionne" value="btn-centre-interet-perso-precedent">PRECEDENT</button>
+                <button type="button" id="btn-centre-interet-perso" name="actionne" value="btn-centre-interet-perso">SUIVANT</button>
                 <button type="reset">REINITIALISER</button>
               </div>
             </div>
@@ -321,7 +334,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
 
         <br>
         <div style="text-align: center;">
-          <button type="button" id="btn-motivation-perso" name="actionne" value="btn-motivation-perso">ENVOYER : SUIVANT</button>
+          <button type="button" id="btn-motivation-perso-precedent" name="actionne" value="btn-motivation-perso-precedent">PRECEDENT</button>
+          <button type="button" id="btn-motivation-perso" name="actionne" value="btn-motivation-perso">SUIVANT</button>
           <button type="reset">Réinitialiser</button>
         </div>
       </form>
@@ -381,14 +395,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
     <div class="container">
       <h1>Récapitulatif de votre CV</h1>
       <?php
-        $data = $_SESSION;
-        $infos_perso = $data['infos-perso'];
-        $experience_perso = $data['experiences-perso'];
-        $formations = $data['formations'];
-        $competences_perso = $data['competence-perso'];
-        $langues = $data['langues'];
-        $centre_interets = $data['centre-interets'];
-        $motivation = $data['motivation-perso'];
+      $data = $_SESSION;
+      $infos_perso = $data['infos-perso'];
+      $experience_perso = $data['experiences-perso'];
+      $formations = $data['formations'];
+      $competences_perso = $data['competence-perso'];
+      $langues = $data['langues'];
+      $centre_interets = $data['centre-interets'];
+      $motivation = $data['motivation-perso'];
       ?>
       <div class="section">
         <h2>Informations personnelles</h2>
@@ -468,9 +482,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
         </div>
       </div>
     </div>
-    
+
     <br>
     <div style="text-align: center;">
+      <button type="button" id="btn-retour" name="actionne" value="btn-retour">PRECEDENT</button>
       <button type="button" id="btn-valider" name="actionne" value="btn-valider">VALIDER</button>
       <button type="button" id="btn-recommencer" name="actionne" value="btn-recommencer">RECOMMENCER</button>
     </div>
@@ -492,13 +507,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
 
     // 1) Quand on clique sur "CRÉER UN NOUVEAU CV" => afficher infos perso
     btnNouveauCv.addEventListener('click', function() {
-      <?php
-      /* if(session_status() === PHP_SESSION_ACTIVE)
-        $_SESSION = []; */
-      ?>
-
       infosPerso.style.display = 'block';
       btnNouveauCv.style.display = 'none';
+    });
+
+    document.getElementById('btn-infos-perso-precedent').addEventListener('click', function() {
+      window.location.href = "reset.php";
     });
 
     // 2) Quand on clique sur "ENVOYER : SUIVANT" dans infos perso
@@ -529,8 +543,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
           console.error("Erreur lors de l'envoi des infos perso :", error);
         });
     });
-    //a regarder à la maison -
-    //:;:
+
+    document.getElementById('btn-experience-perso-precedent').addEventListener('click', function() {
+      document.getElementById('infos-perso').style.display = 'block';
+      document.getElementById('experience-perso').style.display = 'none';
+    });
+
     document.getElementById('btn-experience-perso').addEventListener('click', function() {
       const form = document.getElementById('form-experience-perso');
       const formData = new FormData(form);
@@ -573,6 +591,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
       container.appendChild(clone);
     });
 
+    document.getElementById('btn-description-experience-professionnelle').addEventListener('click', function() {
+      const container = document.getElementById('description-experience-professionnelle');
+      const newEntry = document.createElement('input');
+      const btn = document.getElementById('btn-description-experience-professionnelle');
+      newEntry.type = 'text';
+      newEntry.name = 'description[]';
+      newEntry.placeholder = 'Entrer une description de vos missions ...';
+      newEntry.classList.add('flex-1');
+      container.insertBefore(newEntry, btn);
+    });
+
+    document.getElementById('btn-formation-perso-precedent').addEventListener('click', function() {
+      document.getElementById('experience-perso').style.display = 'block';
+      document.getElementById('formations-perso').style.display = 'none';
+    });
     //btn-formation-perso
     document.getElementById('btn-formation-perso').addEventListener('click', function() {
       const form = document.getElementById('form-formation-perso');
@@ -603,6 +636,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
         });
     });
 
+
     document.getElementById('btn-ajouter-formation').addEventListener('click', function() {
       const container = document.getElementById('formations-container');
       const formations = container.getElementsByClassName('formation-entry');
@@ -614,6 +648,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
       inputs.forEach(input => input.value = '');
 
       container.appendChild(clone);
+    });
+
+    document.getElementById('btn-description-formation-academique').addEventListener('click', function() {
+      const container = document.getElementById('description-formation-academique');
+      const newEntry = document.createElement('input');
+      const btn = document.getElementById('btn-description-formation-academique');
+      newEntry.type = 'text';
+      newEntry.name = 'description[]';
+      newEntry.placeholder = 'Entrer une description de votre éducation académique ...';
+      newEntry.classList.add('flex-1');
+      container.insertBefore(newEntry, btn);
+    });
+
+    document.getElementById('btn-competence-perso-precedent').addEventListener('click', function() {
+      document.getElementById('formations-perso').style.display = 'block';
+      document.getElementById('competences-perso').style.display = 'none';
     });
 
     document.getElementById('btn-competence-perso').addEventListener('click', function() {
@@ -651,16 +701,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
       };
     }    */
     document.getElementById('btn-ajouter-competence').addEventListener('click', function() {
-      const newEntry = document.createElement('div');
       const container = document.getElementById('intitule-competence');
+      /* const newEntry = document.createElement('div');
       newEntry.classList.add('competence');
 
       newEntry.innerHTML = `
         <label>Compétence</label><br>
         <input type="text" name="competences[]" placeholder="Nouvelle compétence">
-      `;
+      `; */
 
       container.appendChild(newEntry);
+      const div = document.createElement('div');
+      div.className = 'competence';
+      div.innerHTML = `
+        <input type="text" name="competences[]" placeholder="Compétence (ex: Python)">
+        <select name="niveau_competences[]">
+          <option value="">Niveau</option>
+          <option value="Débutant">Débutant</option>
+          <option value="Intermédiaire">Intermédiaire</option>
+          <option value="Avancé">Avancé</option>
+          <option value="Expert">Expert</option>
+        </select>
+      `;
+      container.appendChild(div);
+    });
+
+    document.getElementById('btn-langue-perso-precedent').addEventListener('click', function() {
+      document.getElementById('competences-perso').style.display = 'block';
+      document.getElementById('langues-perso').style.display = 'none';
     });
 
     document.getElementById('btn-langue-perso').addEventListener('click', function() {
@@ -703,6 +771,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
       container.appendChild(newEntry);
     });
 
+    document.getElementById('btn-centre-interet-perso-precedent').addEventListener('click', function() {
+      document.getElementById('langues-perso').style.display = 'block';
+      document.getElementById('centre-interets-perso').style.display = 'none';
+    });
+
     document.getElementById('btn-centre-interet-perso').addEventListener('click', function() {
       const form = document.getElementById('form-centre-interet-perso');
       const formData = new FormData(form);
@@ -743,6 +816,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
       container.appendChild(newEntry);
     });
 
+    document.getElementById('btn-motivation-perso-precedent').addEventListener('click', function() {
+      document.getElementById('centre-interets-perso').style.display = 'block';
+      document.getElementById('motivations-perso').style.display = 'none';
+    });
+
     document.getElementById('btn-motivation-perso').addEventListener('click', function() {
       const form = document.getElementById('form-motivation-perso');
       const formData = new FormData(form);
@@ -771,7 +849,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
         });
     });
 
-    
+
     /* document.getElementById('btn-ajouter-competence').addEventListener('click', function() {
       const container = document.getElementById('competences-container');
       const competences = container.getElementsByClassName('intitule-competence');

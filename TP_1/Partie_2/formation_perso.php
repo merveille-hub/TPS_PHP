@@ -4,6 +4,10 @@ session_start();
 var_dump($_POST);
 if(isset($_POST['nom-ecole'])){
     $formations = [];
+    $descriptions = [];
+    foreach ($_POST['description'] as $key => $description) {
+        $descriptions[] = $description;
+    }
     foreach ($_POST['nom-ecole'] as $index => $ecole) {
         $formation = [
             'nom-ecole' => $ecole,
@@ -11,7 +15,7 @@ if(isset($_POST['nom-ecole'])){
             'diplome' => $_POST['diplome'][$index],
             'date-debut' => $_POST['date-debut'][$index],
             'date-fin' => $_POST['date-fin'][$index],
-            'description' => $_POST['description']
+            'description' => $descriptions
         ];
         $formations[] = $formation;
     }

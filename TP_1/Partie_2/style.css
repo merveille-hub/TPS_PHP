@@ -108,6 +108,12 @@ form input[type="date"] {
     gap: 5%;
 }
 
+.flex-3 {
+    display: flex;
+    columns: 3;
+    gap: 5%;
+}
+
 details {
     margin-top: 20px;
     background-color: #f9f9f9;
