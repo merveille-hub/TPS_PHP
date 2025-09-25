@@ -4,7 +4,10 @@ session_start();
 $langues = [];
 if(isset($_POST['langues'])){
     foreach ($_POST['langues'] as $index => $langue) {
-        $langues[] = $langue;
+        $langues[] = [
+            'langue' => $langue,
+            'niveau' => $_POST['niveau_langues'][$index]
+        ];
     }
 }
 var_dump($_POST);

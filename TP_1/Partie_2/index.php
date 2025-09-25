@@ -268,10 +268,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
         <div>
           <div id="langues-container">
             <div class="langue-entry poste-1">
+              <small><a href="https://www.coe.int/fr/web/common-european-framework-reference-languages" target="_blank">En savoir plus sur les niveaux CECRL</a></small>
               <div class="grid-2" id="intitule-langue">
                 <div class="langue">
-                  <label>Langue</label><br>
+                  <label>Langue</label><br>                  
                   <input type="text" name="langues[]" placeholder="Anglais" value="Anglais">
+                  <!-- <label for="niveau_langues">Niveau de langue</label> -->
+                  <select name="niveau_langues[]" id="niveau_langues" required>
+                    <option value="">-- Sélectionnez un niveau --</option>
+                    <option value="A1">A1 – Débutant</option>
+                    <option value="A2">A2 – Élémentaire</option>
+                    <option value="B1">B1 – Intermédiaire</option>
+                    <option value="B2">B2 – Indépendant</option>
+                    <option value="C1">C1 – Avancé</option>
+                    <option value="C2">C2 – Maîtrise</option>
+                  </select>
                 </div>
               </div>
               <button type="button" id="btn-ajouter-langue">Ajouter une autre langue</button>
@@ -710,7 +721,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
         <input type="text" name="competences[]" placeholder="Nouvelle compétence">
       `; */
 
-      container.appendChild(newEntry);
+      //container.appendChild(newEntry);
       const div = document.createElement('div');
       div.className = 'competence';
       div.innerHTML = `
@@ -759,16 +770,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
     });
 
     document.getElementById('btn-ajouter-langue').addEventListener('click', function() {
-      const newEntry = document.createElement('div');
       const container = document.getElementById('intitule-langue');
-      newEntry.classList.add('langue');
+      const div = document.createElement('div');
+      div.className = 'langue';
 
-      newEntry.innerHTML = `
-        <label>Compétence</label><br>
-        <input type="text" name="langues[]" placeholder="Nouvelle langue">
+      div.innerHTML = `
+        <input type="text" name="langues[]" placeholder="Anglais" value="Anglais">
+        <!-- <label for="niveau_langues">Niveau de langue</label> -->
+        <select name="niveau_langues[]" id="niveau_langues" required>
+          <option value="">-- Sélectionnez un niveau --</option>
+          <option value="A1">A1 – Débutant</option>
+          <option value="A2">A2 – Élémentaire</option>
+          <option value="B1">B1 – Intermédiaire</option>
+          <option value="B2">B2 – Indépendant</option>
+          <option value="C1">C1 – Avancé</option>
+          <option value="C2">C2 – Maîtrise</option>
+        </select>
       `;
 
-      container.appendChild(newEntry);
+      container.appendChild(div);
     });
 
     document.getElementById('btn-centre-interet-perso-precedent').addEventListener('click', function() {

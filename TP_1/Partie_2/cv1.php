@@ -1,11 +1,15 @@
 <?php
 session_name('TP1_PHP');
 session_start();
+/* echo '<pre>';
+print_r($_SESSION);
+echo '</pre>'; */
 $data = $_SESSION;
 $infos_perso = $data['infos-perso'];
 $experience_perso = $data['experiences-perso'];
 $formations = $data['formations'];
 $competences_perso = $data['competence-perso'];
+$langues = $data['langues'];
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -161,17 +165,22 @@ $competences_perso = $data['competence-perso'];
             <div class="left-column">
                 <div class="section summary">
                     <h3>Summary</h3>
-                    <p>Senior Analyst with 5+ years of experience in data analysis, business intelligence, and process optimization. Skilled in driving operational efficiency, forecasting, and leading data-driven strategies to support business decisions and improvements. Strong communicator focused on results.</p>
-                </div>
+                    <p><?=$data["motivation-perso"]["motivation"]?></p>
+<!--                     <p>Senior Analyst with 5+ years of experience in data analysis, business intelligence, and process optimization. Skilled in driving operational efficiency, forecasting, and leading data-driven strategies to support business decisions and improvements. Strong communicator focused on results.</p>
+ -->                </div>
 
-                <div class="section skills">
-                    <h3>Skills</h3>
+                <div class="section langue">
+                    <h3>Langues</h3>
                     <ul>
                         <?php
-                        foreach ($competences_perso['competences'] as $key => $competence) :
-                            if (trim($competence) !== '') : ?>
-                                <li><?= $competence ?></li>
-                        <?php endif;
+                        foreach ($langues as $key => $langue) :
+                            if (trim($langue['langue']) !== '') : 
+                                if (trim($langue['niveau']) !== '') : ?>
+                                    <li><span><?= $langue['langue'] ?></span> - <span><?=$langue['niveau']?></span></li>
+                                <?php else : ?>                                
+                                    <li><span><?= $langue['langue'] ?></span></li>
+                                <?php endif;
+                            endif;
                         endforeach;
                         ?>
                     </ul>
@@ -200,7 +209,7 @@ $competences_perso = $data['competence-perso'];
                             <ul>
                                 <?php
                                 $descriptions = $experience['description'];
-                                $descriptions = explode('\n \t', $descriptions);
+                                //$descriptions = explode('\n \t', $descriptions);
                                 foreach ($descriptions as $key => $description) : ?>
                                     <li><?= $description ?></li>
                                 <?php endforeach;

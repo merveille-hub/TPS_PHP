@@ -2,10 +2,14 @@
 session_name('TP1_PHP');
 session_start();
 $data = $_SESSION;
+/* echo 'session: ';
+echo '<pre>';
+print_r($_SESSION);
+echo '</pre>';  */
 $infos_perso = $data['infos-perso'];
 $experience_perso = $data['experiences-perso'];
 $formations = $data['formations'];
-$competences_perso = $data['competence-perso'];
+$competences_perso = $data['competences-perso'];
 $langues = $data['langues'];
 $centre_interets = $data['centre-interets'];
 $motivation = $data['motivation-perso'];
@@ -125,11 +129,11 @@ $motivation = $data['motivation-perso'];
           <p><strong>Localisation : </strong><?= $experience['localisation'] ?></p>
           <p><strong>Periode : </strong><?= $experience['date_debut'] ?> / <?= $experience['date_fin'] ?></p>
           <p><strong>Description : </strong>
-            <ul>
-              <?php foreach ($experience['description'] as $key => $description) : ?>
-                <li><?= $description ?></li>
-              <?php endforeach; ?>
-            </ul>
+          <ul>
+            <?php foreach ($experience['description'] as $key => $description) : ?>
+              <li><?= $description ?></li>
+            <?php endforeach; ?>
+          </ul>
           </p>
           <hr>
         <?php endforeach;
@@ -139,12 +143,13 @@ $motivation = $data['motivation-perso'];
       <div class="section">
         <h2>Compétences</h2>
         <ul>
-          <?php 
-            echo '<pre>';
-            print_r($competences_perso);
-            echo '</pre>';
-            foreach ($competences_perso['competences'] as $key => $competence) : ?>
-            <li><?= $competence ?></li>
+          <?php
+          /* echo 'competences: ';
+          echo '<pre>';
+          print_r($competences_perso);
+          echo '</pre>'; */
+          foreach ($competences_perso as $key => $competence) : ?>
+            <li><?= $competence['competence'] ?> : <span><?= $competence['niveau'] ?></span></li>
           <?php endforeach; ?>
         </ul>
       </div>
@@ -153,7 +158,7 @@ $motivation = $data['motivation-perso'];
         <h2>Langues</h2>
         <ul>
           <?php foreach ($langues as $key => $langue) : ?>
-            <li><?= $langue ?></li>
+            <li><?= $langue['langue'] ?> : <span><?= $langue['niveau'] ?></span></li>
           <?php endforeach; ?>
         </ul>
       </div>
