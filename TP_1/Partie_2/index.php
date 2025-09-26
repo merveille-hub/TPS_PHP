@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
             <input type="text" name="poste" id="poste" placeholder="Comptable" value="IT engineer">
           </div>
           <div>
-            <label for="photo">Téléverser votre photo</label>
+            <label for="photo">Photo de profil :</label>
             <input type="file" name="photo" id="photo" accept="image/*"><!-- doit etre required -->
           </div>
         </div>
@@ -249,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
               <button type="button" id="btn-ajouter-competence">Ajouter une autre compétence</button>
 
               <div class="flex-3" style="position: relative; left: 45%;">
-                <button type="button" id="btn-competence-perso-precedent" name="actionne" value="btn-competence-perso-precedent">SUIVANT</button>
+                <button type="button" id="btn-competence-perso-precedent" name="actionne" value="btn-competence-perso-precedent">PRECEDENT</button>
                 <button type="button" id="btn-competence-perso" name="actionne" value="btn-competence-perso">SUIVANT</button>
                 <button type="reset">REINITIALISER</button>
               </div>

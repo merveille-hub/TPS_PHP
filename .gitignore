@@ -9,4 +9,5 @@ cvs.txt
 dompdf-3.1.1.zip
 h.php
 /TP_1/index.php
-
+/vendor
+composer.lock

@@ -1,11 +1,16 @@
 <?php
 session_name('TP1_PHP');
 session_start();
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $data = $_SESSION;
-/* echo 'session: ';
+echo 'session: ';
 echo '<pre>';
 print_r($_SESSION);
-echo '</pre>';  */
+echo '</pre>';
 $infos_perso = $data['infos-perso'];
 $experience_perso = $data['experiences-perso'];
 $formations = $data['formations'];
@@ -77,121 +82,128 @@ $motivation = $data['motivation-perso'];
 <body>
   <div class="container">
     <h1>Récapitulatif de votre CV</h1>
+    <div class="header">
+      <?php if (!empty($infos_perso['photo_profil'])) : ?>
+        <img src="<?= htmlspecialchars($infos_perso['photo_profil']) ?>" alt="Photo de profil">
+      <?php else: ?>
+        <!-- <img src="default-avatar.jpg" alt="Avatar par défaut"> -->
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt=" photo de <?=$data['infos-perso']['firstname'] . $data['infos-perso']['lastname'] ?>" />
+      <?php endif; ?>
 
-    <div class="section">
-      <h2>Informations personnelles</h2>
-      <div class="grid-2">
-        <div><span class="label">Nom :</span> <?= $infos_perso['lastname'] ?></div>
-        <div><span class="label">Prénom :</span> <?= $infos_perso['firstname'] ?></div>
-        <div><span class="label">Email :</span> <?= $infos_perso['email'] ?></div>
-        <div><span class="label">Téléphone :</span> <?= $infos_perso['phone'] ?></div>
-        <div><span class="label">Ville :</span> <?= $infos_perso['ville'] ?></div>
-        <div><span class="label">Poste désiré :</span> <?= $infos_perso['poste'] ?></div>
+      <div class="section">
+        <h2>Informations personnelles</h2>
+        <div class="grid-2">
+          <div><span class="label">Nom :</span> <?= $infos_perso['lastname'] ?></div>
+          <div><span class="label">Prénom :</span> <?= $infos_perso['firstname'] ?></div>
+          <div><span class="label">Email :</span> <?= $infos_perso['email'] ?></div>
+          <div><span class="label">Téléphone :</span> <?= $infos_perso['phone'] ?></div>
+          <div><span class="label">Ville :</span> <?= $infos_perso['ville'] ?></div>
+          <div><span class="label">Poste désiré :</span> <?= $infos_perso['poste'] ?></div>
+        </div>
       </div>
-    </div>
 
-    <div class="section">
-      <h2>Motivation</h2>
-      <p class="motivation">
-        <?= $motivation['motivation']; ?>
-      </p>
-    </div>
-
-    <div class="section">
-      <h2>Formations</h2>
-      <?php
-      foreach ($formations as $index => $formation) :
-      ?>
-        <p><strong>Ecole : </strong><?= $formation['nom-ecole'] ?></p>
-        <p><strong>Diplome : </strong><?= $formation['diplome'] ?></p>
-        <p><strong>Localisation : </strong><?= $formation['localisation'] ?></p>
-        <p><strong>Periode : </strong><?= $formation['date-debut'] ?> / <?= $formation['date-fin'] ?></p>
-        <p><strong>Description : </strong>
-        <ul>
-          <?php foreach ($formation['description'] as $key => $description) : ?>
-            <li><?= $description ?></li>
-          <?php endforeach; ?>
-        </ul>
+      <div class="section">
+        <h2>Motivation</h2>
+        <p class="motivation">
+          <?= $motivation['motivation']; ?>
         </p>
-        <hr>
-      <?php endforeach; ?>
-    </div>
+      </div>
 
-    <div class="section">
-      <h2>Expériences professionnelles</h2>
-
-      <div class="experience">
+      <div class="section">
+        <h2>Formations</h2>
         <?php
-        foreach ($experience_perso as $index => $experience) :
+        foreach ($formations as $index => $formation) :
         ?>
-          <p><strong>Poste : </strong><?= $experience['poste'] ?> <?= $experience['poste'] ?> </p>
-          <p><strong>Employeur : </strong><?= $experience['employeur'] ?></p>
-          <p><strong>Localisation : </strong><?= $experience['localisation'] ?></p>
-          <p><strong>Periode : </strong><?= $experience['date_debut'] ?> / <?= $experience['date_fin'] ?></p>
+          <p><strong>Ecole : </strong><?= $formation['nom-ecole'] ?></p>
+          <p><strong>Diplome : </strong><?= $formation['diplome'] ?></p>
+          <p><strong>Localisation : </strong><?= $formation['localisation'] ?></p>
+          <p><strong>Periode : </strong><?= $formation['date-debut'] ?> / <?= $formation['date-fin'] ?></p>
           <p><strong>Description : </strong>
           <ul>
-            <?php foreach ($experience['description'] as $key => $description) : ?>
+            <?php foreach ($formation['description'] as $key => $description) : ?>
               <li><?= $description ?></li>
             <?php endforeach; ?>
           </ul>
           </p>
           <hr>
-        <?php endforeach;
-        ?>
+        <?php endforeach; ?>
       </div>
 
       <div class="section">
-        <h2>Compétences</h2>
-        <ul>
+        <h2>Expériences professionnelles</h2>
+
+        <div class="experience">
           <?php
-          /* echo 'competences: ';
+          foreach ($experience_perso as $index => $experience) :
+          ?>
+            <p><strong>Poste : </strong><?= $experience['poste'] ?> <?= $experience['poste'] ?> </p>
+            <p><strong>Employeur : </strong><?= $experience['employeur'] ?></p>
+            <p><strong>Localisation : </strong><?= $experience['localisation'] ?></p>
+            <p><strong>Periode : </strong><?= $experience['date_debut'] ?> / <?= $experience['date_fin'] ?></p>
+            <p><strong>Description : </strong>
+            <ul>
+              <?php foreach ($experience['description'] as $key => $description) : ?>
+                <li><?= $description[$key] ?></li>
+              <?php endforeach; ?>
+            </ul>
+            </p>
+            <hr>
+          <?php endforeach;
+          ?>
+        </div>
+
+        <div class="section">
+          <h2>Compétences</h2>
+          <ul>
+            <?php
+            /* echo 'competences: ';
           echo '<pre>';
           print_r($competences_perso);
           echo '</pre>'; */
-          foreach ($competences_perso as $key => $competence) : ?>
-            <li><?= $competence['competence'] ?> : <span><?= $competence['niveau'] ?></span></li>
-          <?php endforeach; ?>
-        </ul>
+            foreach ($competences_perso as $key => $competence) : ?>
+              <li><?= $competence['competence'] ?> : <span><?= $competence['niveau'] ?></span></li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Langues</h2>
+          <ul>
+            <?php foreach ($langues as $key => $langue) : ?>
+              <li><?= $langue['langue'] ?> : <span><?= $langue['niveau'] ?></span></li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Centre d'intérêts</h2>
+          <ul>
+            <?php foreach ($centre_interets as $key => $centre_interet) : ?>
+              <li><?= $centre_interet ?></li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
       </div>
 
-      <div class="section">
-        <h2>Langues</h2>
-        <ul>
-          <?php foreach ($langues as $key => $langue) : ?>
-            <li><?= $langue['langue'] ?> : <span><?= $langue['niveau'] ?></span></li>
-          <?php endforeach; ?>
-        </ul>
-      </div>
 
-      <div class="section">
-        <h2>Centre d'intérêts</h2>
-        <ul>
-          <?php foreach ($centre_interets as $key => $centre_interet) : ?>
-            <li><?= $centre_interet ?></li>
-          <?php endforeach; ?>
-        </ul>
-      </div>
     </div>
-
-
-  </div>
-  <br>
-  <div style="text-align: center;">
-    <button type="button" id="btn-retour" name="actionne" value="btn-retour">SUIVANT</button>
-    <button type="button" id="btn-valider" name="actionne" value="btn-valider">VALIDER</button>
-    <button type="button" id="btn-recommencer" name="actionne" value="btn-recommencer">RECOMMENCER</button>
-  </div>
-  <script>
-    document.getElementById('btn-retour').addEventListener('click', function() {
-
-    });
-    document.getElementById('btn-valider').addEventListener('click', function() {
-      window.location.href = 'cv1.php';
-    });
-    document.getElementById('btn-recommencer').addEventListener('click', function() {
-      window.location.href = 'reset.php';
-    });
-  </script>
+    <br>
+    <div style="text-align: center;">
+      <button type="button" id="btn-retour" name="actionne" value="btn-retour">RETOUR</button>
+      <button type="button" id="btn-valider" name="actionne" value="btn-valider">VALIDER</button>
+      <button type="button" id="btn-recommencer" name="actionne" value="btn-recommencer">RECOMMENCER</button>
+    </div>
+    <script>
+      document.getElementById('btn-retour').addEventListener('click', function() {
+        window.location.href = 'index.php#motivations-perso';
+      });
+      document.getElementById('btn-valider').addEventListener('click', function() {
+        window.location.href = 'cv_template.php';
+      });
+      document.getElementById('btn-recommencer').addEventListener('click', function() {
+        window.location.href = 'reset.php';
+      });
+    </script>
 
 </body>
 
